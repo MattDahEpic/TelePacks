@@ -1,0 +1,16 @@
+[
+{
+  "modid": "telepacks",
+  "name": "TelePacks",
+  "description": "Items that allow teleportation.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["MattDahEpic"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["mdecore"]
+}
+]
