@@ -9,6 +9,8 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChatComponentText;
@@ -37,43 +39,49 @@ public class ItemTelePack extends Item {
         return 32;
     }
     @Override
+    @SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack stack) {
+        return canCrossDimensions(stack);
+    }
+    @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         player.setItemInUse(stack,this.getMaxItemUseDuration(stack));
         return stack;
     }
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityPlayer player, int timeLeft) {
-        //TODO: sound on use cancel
-        //TODO: debuff based on time left?
-        if (player.isSneaking()) {
-            int[] playerPos = PlayerHelper.getPlayerPosAsIntegerArray(player);
-            int dimension = player.dimension;
-            setStoredLocation(player, stack, playerPos[0], playerPos[1], playerPos[2], dimension);
-            return;
+        if (!world.isRemote) {
+            if (player.isSneaking()) {
+                int[] playerPos = PlayerHelper.getPlayerPosAsIntegerArray(player);
+                int dimension = player.dimension;
+                setStoredLocation(player, stack, playerPos[0], playerPos[1], playerPos[2], dimension);
+            } else {
+                world.playSoundAtEntity(player, "random.fizz", 1.0F, 1.0F);
+                player.addPotionEffect(new PotionEffect(Potion.confusion.id,240,0,true,true));
+            }
         }
     }
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World world, EntityPlayer player) {
-        if (stack.hasTagCompound()) {
+        if (stack.hasTagCompound() && !world.isRemote) {
             if (player.isSneaking()) {
                 return stack;
             } else if (hasValidLocation(stack)) {
                 int[] storedPos = getStoredLocation(stack);
                 if (storedPos[3] == player.dimension) {
                     player.setPositionAndUpdate(storedPos[0] + 0.5, storedPos[1] + 0.025, storedPos[2] + 0.5);
+                    world.playSoundAtEntity(player, "mob.endermen.portal", 1.0F, 1.0F);
                 } else {
                     if (canCrossDimensions(stack)) {
                         player.setPositionAndUpdate(storedPos[0] + 0.5, storedPos[1] + 0.025, storedPos[2] + 0.5);
                         ServerConfigurationManager manager = MinecraftServer.getServer().getConfigurationManager();
-                        TeleportHelper.transferPlayerToDimension(manager.getPlayerByUsername(player.getName()),storedPos[3],manager);
+                        TeleportHelper.transferPlayerToDimension(manager.getPlayerByUsername(player.getDisplayNameString()),storedPos[3],manager);
                         return stack;
                     } else {
                         player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW+"The technology in this pack is too primitive to cross the dimensional gap."));
                         return stack;
                     }
                 }
-                //TODO: particles
-                //TODO: sound on teleport: enderman
                 return stack;
             }
         }
