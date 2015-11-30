@@ -9,8 +9,6 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.ChatComponentText;
@@ -36,7 +34,7 @@ public class ItemTelePack extends Item {
     }
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
-        return 32;
+        return 20;
     }
     @Override
     @SideOnly(Side.CLIENT)
@@ -57,7 +55,6 @@ public class ItemTelePack extends Item {
                 setStoredLocation(player, stack, playerPos[0], playerPos[1], playerPos[2], dimension);
             } else {
                 world.playSoundAtEntity(player, "random.fizz", 1.0F, 1.0F);
-                player.addPotionEffect(new PotionEffect(Potion.confusion.id,240,0,true,true));
             }
         }
     }
@@ -68,14 +65,14 @@ public class ItemTelePack extends Item {
                 return stack;
             } else if (hasValidLocation(stack)) {
                 int[] storedPos = getStoredLocation(stack);
-                if (storedPos[3] == player.dimension) {
+                if (storedPos[3] == player.dimension) { //same dim
                     player.setPositionAndUpdate(storedPos[0] + 0.5, storedPos[1] + 0.025, storedPos[2] + 0.5);
                     world.playSoundAtEntity(player, "mob.endermen.portal", 1.0F, 1.0F);
                 } else {
-                    if (canCrossDimensions(stack)) {
-                        player.setPositionAndUpdate(storedPos[0] + 0.5, storedPos[1] + 0.025, storedPos[2] + 0.5);
+                    if (canCrossDimensions(stack)) { //different dim
                         ServerConfigurationManager manager = MinecraftServer.getServer().getConfigurationManager();
                         TeleportHelper.transferPlayerToDimension(manager.getPlayerByUsername(player.getDisplayNameString()),storedPos[3],manager);
+                        player.setPositionAndUpdate(storedPos[0] + 0.5, storedPos[1] + 0.025, storedPos[2] + 0.5);
                         return stack;
                     } else {
                         player.addChatComponentMessage(new ChatComponentText(EnumChatFormatting.YELLOW+"The technology in this pack is too primitive to cross the dimensional gap."));
