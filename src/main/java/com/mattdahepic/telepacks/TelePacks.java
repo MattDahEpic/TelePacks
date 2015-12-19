@@ -2,6 +2,7 @@ package com.mattdahepic.telepacks;
 
 import com.mattdahepic.mdecore.update.UpdateChecker;
 import com.mattdahepic.telepacks.item.ItemTelePack;
+
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -20,7 +21,7 @@ public class TelePacks {
     public static final String MODID = "telepacks";
     public static final String NAME = "TelePacks";
     public static final String VERSION = "@VERSION@";
-    public static final String DEPENDENCIES = "required-after:mdecore@[1.8.8-1.5,);";
+    public static final String DEPENDENCIES = "required-after:mdecore@[1.8.8-1.6,);";
     public static final String UPDATE_URL = "https://raw.githubusercontent.com/MattDahEpic/Version/master/"+ MinecraftForge.MC_VERSION+"/"+MODID+".txt";
 
     @SidedProxy(clientSide = "com.mattdahepic.telepacks.client.ClientProxy",serverSide = "com.mattdahepic.telepacks.CommonProxy")
