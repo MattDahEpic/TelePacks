@@ -16,7 +16,7 @@ public class CommonProxy {
     public void registerRecipes () {
         for (EnumDyeColor c : EnumDyeColor.values()) {
             NBTTagCompound tag = new NBTTagCompound();
-            tag.setString(ItemTelePack.COLOR_KEY,c.getName());
+            tag.setString(ItemTelePack.COLOR_KEY,c.name());
             //basic
             GameRegistry.addShapedRecipe(new ItemStack(TelePacks.telepack,1,0,tag),"eee","ewe","eee",'e',Items.ender_pearl,'w',new ItemStack(Blocks.wool,1,c.getMetadata()));
             //advanced
