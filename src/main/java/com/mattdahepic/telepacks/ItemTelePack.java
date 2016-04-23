@@ -26,7 +26,7 @@ public class ItemTelePack extends Item {
     public ItemTelePack () {
         super();
         this.setUnlocalizedName(NAME);
-        this.setCreativeTab(CreativeTabs.tabAllSearch);
+        this.setCreativeTab(CreativeTabs.SEARCH);
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
     }
