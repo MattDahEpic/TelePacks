@@ -12,7 +12,7 @@ public class TelePacks {
     static final String MODID = "telepacks";
     static final String NAME = "TelePacks";
     static final String VERSION = "@VERSION@";
-    static final String DEPENDENCIES = "required-after:mdecore@[1.9-1.0.1,);";
+    static final String DEPENDENCIES = "required-after:mdecore@[1.9.4-1.0,);";
     static final String UPDATE_JSON = "https://raw.githubusercontent.com/MattDahEpic/Version/master/"+MODID+".json";
 
     @SidedProxy(clientSide = "com.mattdahepic.telepacks.ClientProxy",serverSide = "com.mattdahepic.telepacks.CommonProxy")
