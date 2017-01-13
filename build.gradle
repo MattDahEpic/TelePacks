@@ -11,18 +11,18 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.10.2-1.0"
+version = "1.11-1.0"
 group = "com.mattdahepic.telepacks" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "telepacks"
 
 minecraft {
-    version = "1.10.2-12.18.0.2005-1.10.0"
+    version = "1.11-13.19.1.2189"
     runDir = "run"
 
     replace "@VERSION@", project.version
     replaceIn "TelePacks.java"
 
-    mappings = "snapshot_20160630"
+    mappings = "snapshot_20161201"
     //makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 

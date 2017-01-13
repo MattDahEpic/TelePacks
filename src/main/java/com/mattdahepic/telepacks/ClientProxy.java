@@ -23,11 +23,14 @@ public class ClientProxy extends CommonProxy {
         Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
             @Override
             public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                try {
-                    return EnumDyeColor.valueOf(stack.getTagCompound().getString(ItemTelePack.COLOR_KEY)).getMapColor().colorValue;
-                } catch (Exception ex) {
-                    return EnumDyeColor.GREEN.getMapColor().colorValue;
+                if (tintIndex == 1) {
+                    try {
+                        return EnumDyeColor.valueOf(stack.getTagCompound().getString(ItemTelePack.COLOR_KEY)).getMapColor().colorValue;
+                    } catch (Exception ex) {
+                        return EnumDyeColor.GREEN.getMapColor().colorValue;
+                    }
                 }
+                return -1;
             }
         }, TelePacks.telepack);
     }

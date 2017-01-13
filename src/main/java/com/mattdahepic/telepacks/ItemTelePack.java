@@ -44,9 +44,9 @@ public class ItemTelePack extends Item {
         return canCrossDimensions(stack);
     }
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         player.setActiveHand(hand);
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,stack);
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS,player.getHeldItem(hand));
     }
     @Override
     public void onPlayerStoppedUsing (ItemStack stack, World world, EntityLivingBase entity, int timeLeft) {
@@ -71,13 +71,13 @@ public class ItemTelePack extends Item {
                     }
                     if (loc.dimension == entity.dimension) {
                         entity.setPositionAndUpdate(loc.x+.5f, loc.y+.25f, loc.z+.5f);
-                        ((EntityPlayer)entity).getCooldownTracker().setCooldown(this, canCrossDimensions(stack) ? 240 : 90);
+                        ((EntityPlayer)entity).getCooldownTracker().setCooldown(this, canCrossDimensions(stack) ? TelePacksConfig.advancedRechargeTicks : TelePacksConfig.basicRechargeTicks);
                         entity.playSound(new SoundEvent(new ResourceLocation("minecraft:mob.enderman.portal")), 1f, 1f);
                     } else {
-                        ((EntityPlayer)entity).addChatComponentMessage(new TextComponentString(TextFormatting.YELLOW + "The technology in this pack is too primitive to cross the dimensional gap."));
+                        entity.sendMessage(new TextComponentString(TextFormatting.YELLOW + "The technology in this pack is too primitive to cross the dimensional gap."));
                     }
                 } else {
-                    ((EntityPlayer)entity).addChatComponentMessage(new TextComponentString("No location set!"));
+                    entity.sendMessage(new TextComponentString("No location set!"));
                 }
             }
         }
@@ -116,7 +116,7 @@ public class ItemTelePack extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     @SuppressWarnings("unchecked")
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         list.add(new ItemStack(item,1,0));
         list.add(new ItemStack(item,1,1));
     }
@@ -148,7 +148,7 @@ public class ItemTelePack extends Item {
             tags.setInteger("locY", loc.y);
             tags.setInteger("locZ", loc.z);
             tags.setInteger("dimension",loc.dimension);
-            player.addChatComponentMessage(new TextComponentString("Location stored."));
+            player.sendMessage(new TextComponentString("Location stored."));
         }
     }
     private static boolean canCrossDimensions (ItemStack stack) {
