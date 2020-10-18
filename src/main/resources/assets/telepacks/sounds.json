@@ -1,0 +1,10 @@
+{
+  "items.telepack.teleport": {
+    "sounds": ["minecraft:mob/endermen/portal"],
+    "subtitle": "subtitle.telepacks.teleport"
+  },
+  "items.telepack.fizz": {
+    "sounds": ["minecraft:random/fizz"],
+    "subtitle": "subtitle.telepacks.fizz"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "telepacks.location_stored": "Location stored!",
+  "telepacks.tooltip.location": "Location set at ({0}, {1}, {2})",
+  "telepacks.tooltip.dimension": "In the dimension {0}",
+  "telepacks.no_location": "No location set.",
+  "telepacks.no_cross_dimension": "The technology in this pack is too primitive to cross the dimensional gap.",
+
+  "items.telepacks.telepack_basic": "Basic TelePack",
+  "items.telepacks.telepack_advanced": "Advanced TelePack",
+
+  "subtitle.telepacks.teleport": "Pack teleports",
+  "subtitle.telepacks.fizz": "Failed teleport"
+}

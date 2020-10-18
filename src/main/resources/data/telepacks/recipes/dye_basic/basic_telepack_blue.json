@@ -1,0 +1,15 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "telepacks:telepack"
+    },
+    {
+      "tag": "forge:dyes/blue"
+    }
+  ],
+  "result":{
+    "item": "telepacks:telepack",
+    "nbt": "{\"color\":\"blue\"}"
+  }
+}

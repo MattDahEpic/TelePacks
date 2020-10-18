@@ -1,35 +1,40 @@
 package com.mattdahepic.telepacks;
 
+import com.mattdahepic.mdecore.common.registries.ConfigRegistry;
+import com.mattdahepic.mdecore.common.registries.ItemRegistry;
+import net.minecraft.item.Item;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(modid = TelePacks.MODID,name = TelePacks.NAME,version = TelePacks.VERSION,dependencies = TelePacks.DEPENDENCIES,updateJSON = TelePacks.UPDATE_JSON)
-public class TelePacks {
-    static final String MODID = "telepacks";
-    static final String NAME = "TelePacks";
-    static final String VERSION = "@VERSION@";
-    static final String DEPENDENCIES = "required-after:mdecore@[1.11-0.2,);";
-    static final String UPDATE_JSON = "https://raw.githubusercontent.com/MattDahEpic/Version/master/"+MODID+".json";
+@Mod("telepacks")
+public class TelePacks extends ItemRegistry {
+    public static final String MODID = "telepacks";
 
-    @SidedProxy(clientSide = "com.mattdahepic.telepacks.ClientProxy",serverSide = "com.mattdahepic.telepacks.CommonProxy")
-    public static CommonProxy proxy;
+    public static Item telepack;
+    public static Item advanced_telepack;
 
-    static final Logger logger = LogManager.getLogger(MODID);
+    public TelePacks() {
+        //config
+        ConfigRegistry.registerConfig(null, TelePacksConfig.COMMON_SPEC);
 
-    static ItemTelePack telepack = new ItemTelePack();
-
-    @Mod.EventHandler
-    public void load (FMLPreInitializationEvent e) {
-        proxy.registerItems();
-        proxy.registerRenderers();
+        //mod bus events
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.register(this);
     }
-    @Mod.EventHandler
-    public void init (FMLInitializationEvent e) {
-        proxy.registerRecipes();
-        proxy.registerColorHandler();
+
+    @SubscribeEvent
+    public void clientSetup (FMLClientSetupEvent event) {
+        DistExecutor.safeCallWhenOn(Dist.CLIENT,() -> ClientProxy::new);
+    }
+    @SubscribeEvent
+    public void register(RegistryEvent.Register<Item> register) {
+        telepack = registerItem(new ItemTelePack(),"telepack");
+        advanced_telepack = registerItem(new ItemTelePack(),"advanced_telepack");
     }
 }

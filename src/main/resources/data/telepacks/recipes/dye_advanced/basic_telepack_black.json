@@ -1,0 +1,15 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "telepacks:advanced_telepack"
+    },
+    {
+      "tag": "forge:dyes/black"
+    }
+  ],
+  "result":{
+    "item": "telepacks:advanced_telepack",
+    "nbt": "{\"color\":\"black\"}"
+  }
+}

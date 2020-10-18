@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[34,)"
+license="All rights reserved"
+issueTrackerURL="https://github.com/MattDahEpic/TelePacks/issues"
+
+[[mods]]
+    modId="telepacks"
+    version="${file.jarVersion}"
+    displayName="TelePacks"
+    updateJSONURL="https://raw.githubusercontent.com/MattDahEpic/Version/master/telepacks.json"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/telepacks"
+    credits="Thanks to the entire open source mod community from which I used code."
+    authors="MattDahEpic"
+    description='''
+    Items that allow teleportation.
+    '''
+
+    [[dependencies.telepacks]]
+        modId="forge"
+        mandatory=true
+        versionRange="[34,)"
+        ordering="NONE"
+        side="BOTH"
+    [[dependencies.telepacks]]
+        modId="minecraft"
+        mandatory=true
+        versionRange="[1.16.3]"
+        ordering="NONE"
+        side="BOTH"
+    [[dependencies.telepacks]]
+        modId="mdecore"
+        mandatory=true
+        versionRange="[16.0.1,)"
+        ordering="NONE"
+        side="BOTH"
