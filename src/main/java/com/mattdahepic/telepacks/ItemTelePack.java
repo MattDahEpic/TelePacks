@@ -52,7 +52,7 @@ public class ItemTelePack extends Item {
     public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
         if (!world.isRemote && entity instanceof PlayerEntity) {
             if (entity.isSneaking() && timeLeft != 0) {
-                setStoredLocation((PlayerEntity)entity,stack,new TelePackLocation(entity.getPosX(),entity.getPosY(), entity.getPosZ(),entity.world.dimension.field_240900_c_));
+                setStoredLocation((PlayerEntity)entity,stack,new TelePackLocation(entity.getPosX(),entity.getPosY(), entity.getPosZ(),entity.world.dimension.location));
             } else {
                 ((ServerPlayerEntity)entity).connection.sendPacket(new SPlaySoundPacket(new ResourceLocation("telepacks:items.telepack.fizz"),SoundCategory.MASTER, new Vector3d(entity.getPosX(),entity.getPosY(),entity.getPosZ()),1f,1f));
                 ((PlayerEntity)entity).getCooldownTracker().setCooldown(this,3);
@@ -66,10 +66,10 @@ public class ItemTelePack extends Item {
             if (!entity.isSneaking()) {
                 if (hasValidLocation(stack)) {
                     TelePackLocation loc = getStoredLocation(stack);
-                    if (!loc.dimension.equals(entity.world.dimension.field_240900_c_)) { //need to move dimensions
+                    if (!loc.dimension.equals(entity.world.dimension.location)) { //need to move dimensions
                         if (canCrossDimensions(stack)) {
                             PlayerList playerList = entity.getServer().getPlayerList();
-                            ServerWorld newWorld = entity.getServer().getWorld(RegistryKey.func_240903_a_(Registry.field_239699_ae_, loc.dimension));
+                            ServerWorld newWorld = entity.getServer().getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, loc.dimension));
                             try {
                                 entity.changeDimension(newWorld, new ITeleporter() {
                                     @Override
