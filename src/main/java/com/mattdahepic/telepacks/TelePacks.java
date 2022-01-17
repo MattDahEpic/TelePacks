@@ -2,7 +2,7 @@ package com.mattdahepic.telepacks;
 
 import com.mattdahepic.mdecore.common.registries.ConfigRegistry;
 import com.mattdahepic.mdecore.common.registries.ItemRegistry;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
