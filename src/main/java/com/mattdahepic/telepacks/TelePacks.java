@@ -1,23 +1,22 @@
 package com.mattdahepic.telepacks;
 
 import com.mattdahepic.mdecore.common.registries.ConfigRegistry;
-import com.mattdahepic.mdecore.common.registries.ItemRegistry;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 @Mod("telepacks")
-public class TelePacks extends ItemRegistry {
+public class TelePacks {
     public static final String MODID = "telepacks";
-
-    public static Item telepack;
-    public static Item advanced_telepack;
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final RegistryObject<Item> TELEPACK_ITEM = ITEMS.register("telepack", ItemTelePack::new);
+    public static final RegistryObject<Item> ADVANCED_TELEPACK_ITEM = ITEMS.register("advanced_telepack", ItemTelePack::new);
 
     public TelePacks() {
         //config
@@ -25,16 +24,9 @@ public class TelePacks extends ItemRegistry {
 
         //mod bus events
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.register(this);
-    }
-
-    @SubscribeEvent
-    public void clientSetup (FMLClientSetupEvent event) {
-        DistExecutor.safeCallWhenOn(Dist.CLIENT,() -> ClientProxy::new);
-    }
-    @SubscribeEvent
-    public void register(RegistryEvent.Register<Item> register) {
-        telepack = registerItem(new ItemTelePack(),"telepack");
-        advanced_telepack = registerItem(new ItemTelePack(),"advanced_telepack");
+        ITEMS.register(modBus);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            modBus.addListener(ClientProxy::registerItemColors);
+        }
     }
 }

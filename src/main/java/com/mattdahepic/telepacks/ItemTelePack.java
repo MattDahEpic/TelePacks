@@ -14,7 +14,6 @@ import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.Level;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.util.ITeleporter;
@@ -64,7 +63,7 @@ public class ItemTelePack extends Item {
             if (entity.isShiftKeyDown() && timeLeft != 0) {
                 setStoredLocation((Player)entity,stack,new TelePackLocation(entity.getX(),entity.getY(), entity.getZ(),entity.level.dimension.location));
             } else {
-                ((ServerPlayer)entity).connection.send(new ClientboundCustomSoundPacket(new ResourceLocation("telepacks:items.telepack.fizz"),SoundSource.MASTER, new Vec3(entity.getX(),entity.getY(),entity.getZ()),1f,1f));
+                ((ServerPlayer)entity).connection.send(new ClientboundCustomSoundPacket(new ResourceLocation("telepacks:items.telepack.fizz"),SoundSource.MASTER, new Vec3(entity.getX(),entity.getY(),entity.getZ()),1f,1f,0));
                 ((Player)entity).getCooldowns().addCooldown(this,3);
             }
         }
@@ -100,15 +99,15 @@ public class ItemTelePack extends Item {
                             }
                             //end patch code
                         } else {
-                            ((Player) entity).displayClientMessage(new TranslatableComponent("telepacks.no_cross_dimension"),true);
+                            ((Player) entity).displayClientMessage(Component.translatable("telepacks.no_cross_dimension"),true);
                         }
                     } else { //same dimension, just move
                         entity.teleportTo(loc.x+.5f, loc.y+.25f, loc.z+.5f);
                     }
                     ((Player)entity).getCooldowns().addCooldown(this, canCrossDimensions(stack) ? TelePacksConfig.COMMON.advancedRechargeTicks.get() : TelePacksConfig.COMMON.basicRechargeTicks.get());
-                    ((ServerPlayer)entity).connection.send(new ClientboundCustomSoundPacket(new ResourceLocation("telepacks:items.telepack.teleport"),SoundSource.MASTER, new Vec3(entity.getX(),entity.getY(),entity.getZ()),1f,1f));
+                    ((ServerPlayer)entity).connection.send(new ClientboundCustomSoundPacket(new ResourceLocation("telepacks:items.telepack.teleport"),SoundSource.MASTER, new Vec3(entity.getX(),entity.getY(),entity.getZ()),1f,1f,0));
                 } else {
-                    ((Player) entity).displayClientMessage(new TranslatableComponent("telepacks.no_location"),true);
+                    ((Player) entity).displayClientMessage(Component.translatable("telepacks.no_location"),true);
                 }
             }
         }
@@ -117,7 +116,7 @@ public class ItemTelePack extends Item {
 
     @Override
     public Component getName (ItemStack stack) {
-        return new TranslatableComponent(canCrossDimensions(stack) ? "items.telepacks.telepack_advanced" : "items.telepacks.telepack_basic");
+        return Component.translatable(canCrossDimensions(stack) ? "items.telepacks.telepack_advanced" : "items.telepacks.telepack_basic");
     }
 
     @Override
@@ -125,19 +124,12 @@ public class ItemTelePack extends Item {
         if (stack.hasTag()) {
             if (hasValidLocation(stack)) {
                 TelePackLocation loc = getStoredLocation(stack);
-                tooltip.add(new TranslatableComponent("telepacks.tooltip.location",loc.x,loc.y,loc.z));
-                tooltip.add(new TranslatableComponent("telepacks.tooltip.dimension",loc.dimension));
+                tooltip.add(Component.translatable("telepacks.tooltip.location",loc.x,loc.y,loc.z));
+                tooltip.add(Component.translatable("telepacks.tooltip.dimension",loc.dimension));
                 return;
             }
         }
-        tooltip.add(new TranslatableComponent("telepacks.no_location"));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.allowdedIn(group)) {
-            items.add(new ItemStack(this));
-        }
+        tooltip.add(Component.translatable("telepacks.no_location"));
     }
 
     /* HELPER METHODS */
@@ -161,16 +153,10 @@ public class ItemTelePack extends Item {
         tags.putInt("locY", loc.y);
         tags.putInt("locZ", loc.z);
         tags.putString("dimension",loc.dimension.toString());
-        player.displayClientMessage(new TranslatableComponent("telepacks.location_stored"),true);
+        player.displayClientMessage(Component.translatable("telepacks.location_stored"),true);
     }
     private static boolean canCrossDimensions (ItemStack stack) {
-        return stack.getItem() == TelePacks.advanced_telepack;
-    }
-    private static ItemStack basicPack () {
-        return new ItemStack(TelePacks.telepack);
-    }
-    private static ItemStack advancedPack () {
-        return new ItemStack(TelePacks.advanced_telepack);
+        return stack.getItem() == TelePacks.ADVANCED_TELEPACK_ITEM.get();
     }
 
     private static class TelePackLocation {
